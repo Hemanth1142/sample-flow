@@ -1,0 +1,116 @@
+<div id="forms" class="page-layout simple fullwidth" fxLayout="column">
+  <div
+    class="header accent p-24 h-160"
+    fxLayout="column"
+    fxLayoutAlign="center center"
+    fxLayout.gt-xs="row"
+    fxLayoutAlign.gt-xs="space-between center"
+  >
+    <div
+      fxLayout="column"
+      fxLayoutAlign="center center"
+      fxLayout.gt-xs="column"
+      fxLayoutAlign.gt-xs="center start"
+    >
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <a routerLink="/"
+          ><mat-icon class="secondary-text s-18">home</mat-icon></a
+        >
+        <mat-icon class="secondary-text s-16">chevron_right</mat-icon>
+        <a routerLink="/user"><span class="secondary-text">User</span></a>
+        <mat-icon class="secondary-text s-16">chevron_right</mat-icon>
+        <span class="secondary-text">Details</span>
+      </div>
+      <div class="h1">
+        User Management
+      </div>
+      <!-- <div class="h1 mt-16">Forms</div> -->
+    </div>
+
+    <a
+      mat-raised-button
+      class="reference-button mt-16 mt-sm-0"
+      [routerLink]="'/user'"
+    >
+      <mat-icon class="mr-8">arrow_back</mat-icon>
+      <span>Back To List</span>
+    </a>
+  </div>
+
+  <div id="about" class="p-24" fxLayout="row wrap">
+    <div
+      class="about-content"
+      fxLayout="column"
+      fxFlex="100"
+      fxFlex.gt-sm="100"
+      fxFlex.gt-md="100"
+    >
+      <div class="profile-box info-box general" fxLayout="column">
+        <header class="accent">
+          <div class="title">User Information</div>
+        </header>
+
+        <div class="content">
+          <div class="info-line">
+            <div class="title">Profile Image</div>
+            <div class="info">
+              <div class="friend" fxFlex="20">
+                <img
+                  default="/assets/images/avatars/profile.jpg"
+                  [src]="userDetails.image"
+                  [alt]="
+                    (userDetails.firstName + ' ' + userDetails.lastName).substr(
+                      0,
+                      6
+                    )
+                  "
+                />
+              </div>
+            </div>
+          </div>
+          <div class="info-line">
+            <div class="title">Username</div>
+            <div class="info">{{ userDetails.userName }}</div>
+          </div>
+
+          <div class="info-line">
+            <div class="title">Email</div>
+            <div class="info">{{ userDetails.email }}</div>
+          </div>
+
+          <div class="info-line">
+            <div class="title">Phone Number</div>
+            <div class="info">{{ userDetails.mobileNumber }}</div>
+          </div>
+
+          <div class="info-line">
+            <div class="title">Status</div>
+            <div class="info">
+              <mat-button-toggle-group
+                class="button-small"
+                appearance="legacy"
+                [(ngModel)]="status"
+              >
+                <mat-button-toggle
+                  [value]="true"
+                  (click)="updateUser(true)"
+                  class="bg-success"
+                  aria-label="Status Active"
+                >
+                  Active
+                </mat-button-toggle>
+                <mat-button-toggle
+                  [value]="false"
+                  (click)="updateUser(false)"
+                  aria-label="Status Inactive"
+                >
+                  Inactive
+                </mat-button-toggle>
+              </mat-button-toggle-group>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

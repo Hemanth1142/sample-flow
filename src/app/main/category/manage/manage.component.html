@@ -1,0 +1,243 @@
+<div id="forms" class="page-layout simple fullwidth" fxLayout="column">
+  <div
+    class="header accent p-24 h-160"
+    fxLayout="column"
+    fxLayoutAlign="center center"
+    fxLayout.gt-xs="row"
+    fxLayoutAlign.gt-xs="space-between center"
+  >
+    <div
+      fxLayout="column"
+      fxLayoutAlign="center center"
+      fxLayout.gt-xs="column"
+      fxLayoutAlign.gt-xs="center start"
+    >
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <a routerLink="/"
+          ><mat-icon class="secondary-text s-18">home</mat-icon></a
+        >
+        <mat-icon class="secondary-text s-16">chevron_right</mat-icon>
+        <a routerLink="/category"
+          ><span class="secondary-text">Category</span></a
+        >
+        <mat-icon class="secondary-text s-16">chevron_right</mat-icon>
+        <span class="secondary-text">{{ isEdit ? 'Details' : 'Create' }}</span>
+      </div>
+      <div class="h1">
+        {{ isEdit ? 'Category Management' : 'Create Category' }}
+      </div>
+    </div>
+
+    <a
+      mat-raised-button
+      class="reference-button mt-16 mt-sm-0"
+      [routerLink]="'/category'"
+    >
+      <mat-icon class="mr-8">arrow_back</mat-icon>
+      <span>Back To List</span>
+    </a>
+  </div>
+  <div class="content p-24">
+    <div class="middle-content" fxLayout="row" fxLayoutAlign="start">
+      <form
+        fxLayout="column"
+        fxLayoutAlign="start"
+        fxFlex="1 0 auto"
+        [formGroup]="categoryForm"
+        (submit)="onSubmit($event)"
+      >
+        <div class="frm-block-layout pad-calc-container">
+          <div class="box gradient single-row-view ">
+            <!-- <div class="title frm-title-none">
+                    <div class="h1">
+                        Category Management
+                    </div> -->
+            <!-- <h4>Category Management</h4>-->
+            <!-- </div> -->
+            <div class="content label-lt-align">
+              <div class="mat-card  mat-elevation-z4 p-24 mr-24">
+                <div
+                  class="form-control"
+                  fxLayout.lt-sm="column"
+                  fxLayout="row"
+                  fxLayoutGap="20px"
+                >
+                  <mat-label
+                    fxLayout="column"
+                    fxLayout.sm="row"
+                    fxLayoutAlign="flex-start"
+                    ><span
+                      >Name<span class="required-field">&#42;</span></span
+                    ></mat-label
+                  >
+                  <mat-form-field
+                    appearance="outline"
+                    fxLayout="column"
+                    fxLayout.sm="row"
+                    fxLayoutAlign="flex-start"
+                  >
+                    <input matInput maxlength="75" formControlName="category" />
+                    <mat-icon matSuffix class="secondary-text">user</mat-icon>
+                    <mat-error
+                      *ngIf="categoryForm.get('category').hasError('required')"
+                    >
+                      Category name is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div
+                  class="form-control"
+                  fxLayout.lt-sm="column"
+                  fxLayout="row"
+                  fxLayoutGap="20px"
+                >
+                  <mat-label
+                    fxLayout="column"
+                    fxLayout.sm="row"
+                    fxLayoutAlign="flex-start"
+                  >
+                    <span>Status<span class="required-field">&#42;</span></span>
+                  </mat-label>
+                  <div
+                    fxLayoutAlign="flex-start"
+                    style="width: 100%;padding-bottom: 1.34375em;"
+                  >
+                    <mat-button-toggle-group
+                      appearance="legacy"
+                      formControlName="isActive"
+                    >
+                      <mat-button-toggle
+                        [value]="true"
+                        class="bg-success"
+                        aria-label="Status Active"
+                      >
+                        Active
+                      </mat-button-toggle>
+                      <mat-button-toggle
+                        [value]="false"
+                        aria-label="Status Inactive"
+                      >
+                        Inactive
+                      </mat-button-toggle>
+                    </mat-button-toggle-group>
+                  </div>
+                </div>
+                <div
+                  *ngIf="isEdit"
+                  class="form-control"
+                  fxLayout.lt-sm="column"
+                  fxLayout="row"
+                  fxLayoutGap="20px"
+                >
+                  <mat-label fxLayoutAlign="flex-start">
+                    <span>Old Image</span>
+                  </mat-label>
+                  <div
+                    fxLayoutAlign="flex-start"
+                    style="width: 100%;padding: 1.34375em 0;"
+                  >
+                    <img
+                      [src]="categoryDetail.imageUrl"
+                      [alt]="categoryDetail.category"
+                      default="/assets/images/avatars/profile.jpg"
+                      class="category-image"
+                    />
+                  </div>
+                </div>
+                <div
+                  class="form-control"
+                  fxLayout.lt-sm="column"
+                  fxLayout="row"
+                  fxLayoutGap="20px"
+                >
+                  <mat-label fxLayoutAlign="flex-start">
+                    <span
+                      >Image<span *ngIf="!isEdit" class="required-field"
+                        >&#42;</span
+                      ></span
+                    >
+                  </mat-label>
+                  <div
+                    fxLayoutAlign="flex-start"
+                    fxLayout="column"
+                    style="width: 100%; padding-bottom: 1.34375em;"
+                  >
+                    <div>
+                      <input
+                        type="file"
+                        (change)="fileChange($event)"
+                        class="p-0"
+                        #imageInput
+                        hidden
+                      />
+                      <button
+                        mat-mini-fab
+                        type="button"
+                        matTooltip="Click To Select Image"
+                        aria-label="Select Image"
+                        class="select-image-btn"
+                        (click)="openImageSelector(imageInput)"
+                      >
+                        <mat-icon>attach_file</mat-icon>
+                      </button>
+                      <mat-icon
+                        class="help-icon"
+                        matTooltip="Valid extensions : png,jpg,jpeg,jpe.&#13;Recommended image size is 900w * 300h pixels."
+                        matTooltipClass="allow-cr"
+                        >help</mat-icon
+                      >
+
+                      <div
+                        class="category-image-wrapper"
+                        *ngIf="selectedImage && imageUrl"
+                      >
+                        <img
+                          [src]="imageUrl"
+                          alt="category image"
+                          default="/assets/images/avatars/profile.jpg"
+                          class="category-image selected-image"
+                        />
+                        <mat-icon
+                          class="image-clear-icon"
+                          (click)="clearImage()"
+                          >clear</mat-icon
+                        >
+                      </div>
+                    </div>
+                    <mat-error
+                      class="select-image-err"
+                      *ngIf="
+                        isSubmited && !selectedImage && !imageUrl && !isEdit
+                      "
+                    >
+                      Image is required
+                    </mat-error>
+                  </div>
+                </div>
+
+                <div
+                  class="button-group mt-48"
+                  fxLayout="row"
+                  fxLayoutGap="50px"
+                >
+                  <button mat-raised-button color="accent" type="submit">
+                    {{ isEdit ? 'Update' : 'Create' }}
+                  </button>
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    routerLink="/category/"
+                    type="reset"
+                  >
+                    Discard
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

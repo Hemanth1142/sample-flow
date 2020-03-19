@@ -1,0 +1,63 @@
+<div id="about" class="p-0" fxLayout="row">
+  <div
+    class="about-content"
+    fxLayout="column"
+    fxFlex="100"
+    fxFlex.gt-sm="100"
+    fxFlex.gt-md="100"
+  >
+    <div class="profile-box info-box general" fxLayout="column">
+      <header *ngIf="data.header" class="accent">
+        <div class="title">{{ data.header }}</div>
+
+        <i (click)="dialogRef.close()" class="material-icons close-icon">
+          close
+        </i>
+      </header>
+
+      <div class="content">
+        <div class="info-line" *ngIf="data.image">
+          <div class="title">{{ data.image.lable }}</div>
+          <div class="info">
+            <div class="friend" fxFlex="20">
+              <img
+                default="/assets/images/avatars/profile.jpg"
+                [src]="data.image.src"
+                [alt]="data.image.alt.substr(0, 6)"
+              />
+            </div>
+          </div>
+        </div>
+        <div *ngFor="let block of data.data" class="info-line">
+          <div class="title">{{ block.lable }}</div>
+          <div class="info">{{ block.value ? block.value : '-' }}</div>
+        </div>
+
+        <div
+          *ngIf="data.statusChange && data.statusChange.show"
+          class="info-line"
+        >
+          <div class="title">Status</div>
+          <div class="info">
+            <mat-button-toggle-group
+              appearance="legacy"
+              [(ngModel)]="data.statusChange.value"
+              [disabled]="data.statusChange.disable"
+            >
+              <mat-button-toggle
+                [value]="true"
+                class="bg-success"
+                aria-label="Status Active"
+              >
+                Active
+              </mat-button-toggle>
+              <mat-button-toggle [value]="false" aria-label="Status Inactive">
+                Inactive
+              </mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

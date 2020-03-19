@@ -1,0 +1,19 @@
+@mixin custom-theme($theme) {
+  $accent: map-get($theme, accent);
+  // @error $background;
+  $contrast: map-get($accent, contrast);
+
+  $background-color: map-get($contrast, 600);
+
+  $text-color: map-get($accent, 600);
+
+  .action-button {
+    background: $background-color;
+    cursor: pointer;
+    border: none;
+    margin: 0 2px !important;
+    mat-icon {
+      color: $text-color !important;
+    }
+  }
+}

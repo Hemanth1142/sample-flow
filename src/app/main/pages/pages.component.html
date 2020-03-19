@@ -1,0 +1,143 @@
+<div id="pages" class="page-layout carded fullwidth">
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg accent"></div>
+  <!-- / TOP BACKGROUND -->
+
+  <div class="center">
+    <!-- HEADER -->
+    <div
+      class="header accent"
+      fxLayout="column"
+      fxLayoutAlign="center center"
+      fxLayout.gt-sm="row"
+      fxLayoutAlign.gt-sm="space-between center"
+    >
+      <!-- APP TITLE -->
+      <div
+        class="logo mb-24 mb-md-0"
+        fxLayout="row"
+        fxLayoutAlign="start center"
+      >
+        <mat-icon
+          class="logo-icon s-32 mr-16"
+          [@animate]="{
+            value: '*',
+            params: { delay: '50ms', scale: '0.2' }
+          }"
+        >
+          view_quilt
+        </mat-icon>
+        <span
+          class="logo-text h1"
+          [@animate]="{
+            value: '*',
+            params: { delay: '100ms', x: '-25px' }
+          }"
+        >
+          CMS Pages
+        </span>
+      </div>
+      <!-- / APP TITLE -->
+
+      <!-- SEARCH -->
+      <div class="search-wrapper mx-32 mx-md-0">
+        <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
+          <mat-icon class="search-icon">search</mat-icon>
+          <input
+            #filter
+            [formControl]="searchtxtControl"
+            placeholder="Search for a page"
+          />
+        </div>
+      </div>
+      <!-- / SEARCH -->
+
+      <div class="changeButtons">
+        <!-- Refresh BUTTON -->
+        <button
+          mat-raised-button
+          matTooltip="Refresh"
+          (click)="refreshList()"
+          class="action-button"
+        >
+          <mat-icon class="icon-button">refresh</mat-icon>
+        </button>
+        <!-- / Refresh BUTTON -->
+      </div>
+    </div>
+    <!-- / HEADER -->
+    <div *ngIf="pages.length > 0">
+      <ngx-datatable
+        #table
+        class="material mat-card"
+        [headerHeight]="40"
+        [columnMode]="'flex'"
+        [footerHeight]="50"
+        [rowHeight]="'auto'"
+        [rows]="pages"
+        [selected]="selected"
+        [reorderable]="false"
+        [selectionType]="'checkbox'"
+        (select)="onSelect($event)"
+        [externalPaging]="true"
+        [count]="pageInfo.count"
+        [offset]="pageInfo.page"
+        [limit]="pageInfo.pageSize"
+        (page)="setPage($event)"
+        (sort)="onSort($event)"
+      >
+        <ngx-datatable-column
+          name="Page Title"
+          prop="pageTitle"
+          [width]="25"
+          [flexGrow]="2"
+          cellClass="text-truncate"
+        >
+          <ng-template
+            ngx-datatable-cell-template
+            let-value="value"
+            let-row="row"
+          >
+            <span *ngIf="canUpdate">
+              <a routerLink="{{ row.pageId }}">{{ value }}</a>
+            </span>
+            <span *ngIf="!canUpdate">{{ value }}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-footer>
+          <ng-template
+            ngx-datatable-footer-template
+            let-rowCount="pageInfo.count"
+            let-pageSize="pageInfo.pageSize"
+            let-selectedCount="selectedItem.length"
+            let-curPage="pageInfo.page"
+            let-curPage="pageInfo.page"
+            let-offset="offset"
+          >
+            <datatable-pager
+              [pagerLeftArrowIcon]="'datatable-icon-left'"
+              [pagerRightArrowIcon]="'datatable-icon-right'"
+              [pagerPreviousIcon]="'datatable-icon-prev'"
+              [pagerNextIcon]="'datatable-icon-skip'"
+              [page]="pageInfo.page"
+              [size]="pageInfo.pageSize"
+              [count]="pageInfo.count"
+              [hidden]="!(pageInfo.count / pageInfo.pageSize > 1)"
+              (change)="onPaginate($event)"
+            >
+            </datatable-pager>
+          </ng-template>
+        </ngx-datatable-footer>
+      </ngx-datatable>
+    </div>
+    <div *ngIf="!pages.length" class="material mat-card no-data-card">
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <div
+          [@animate]="{ value: '*', params: { duration: '300ms', y: '100px' } }"
+        >
+          <h3>No CMS pages data found.</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

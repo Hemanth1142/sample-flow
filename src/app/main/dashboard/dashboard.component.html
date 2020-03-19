@@ -1,0 +1,75 @@
+<div
+  id="dashboard-project"
+  class="page-layout simple right-sidebar"
+  fxLayout="row"
+>
+  <!-- CENTER -->
+  <div class="center" fusePerfectScrollbar>
+    <!-- HEADER -->
+    <div>
+      <div
+        class="header accent p-24 pb-0"
+        fxLayout="column"
+        fxLayoutAlign="space-between"
+      >
+        <div fxLayout="row" fxLayoutAlign="space-between start">
+          <span
+            class="mat-display-1 my-0 my-sm-24 welcome-message"
+            [@animate]="{ value: '*', params: { x: '50px' } }"
+            >Welcome
+            {{ user ? user.userName + ',' : '' }}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div
+      class="widget-group p-12"
+      fxLayout="row"
+      fxFlex="100"
+      *fuseIfOnDom
+      [@animateStagger]="{ value: '50' }"
+    >
+      <!-- WIDGET 1 -->
+      <fuse-widget
+        [@animate]="{ value: '*', params: { y: '100%' } }"
+        class="widget"
+        fxLayout="column"
+        fxFlex="100"
+        fxFlex.gt-xs="50"
+        fxFlex.gt-md="35"
+        *ngFor="let widget of dashboardWidgets"
+      >
+        <!-- Front -->
+        <div
+          class="fuse-widget-front"
+          (click)="router.navigateByUrl(widget.link)"
+        >
+          <div class="p-16" fxLayout="row" fxLayoutAlign="center center">
+            <div fxLayout="column">
+              <mat-icon> {{ widget.icon }}</mat-icon>
+            </div>
+            <div fxLayout="column">
+              <span
+                fxLayout="row"
+                fxLayoutAlign="flex-end"
+                class="h4 secondary-text text-truncate font-size-30"
+              >
+                {{ widget.text }}
+              </span>
+              <div
+                class="light-blue-fg font-size-72"
+                fxLayout="row"
+                fxLayoutAlign="flex-end"
+              >
+                <span class="h4 ml-8">
+                  {{ widget.count }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- / Front -->
+      </fuse-widget>
+    </div>
+  </div>
+</div>

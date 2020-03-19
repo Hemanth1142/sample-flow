@@ -1,0 +1,16 @@
+<!-- PROGRESS BAR -->
+<fuse-progress-bar></fuse-progress-bar>
+<!-- / PROGRESS BAR -->
+
+<ng-container *ngIf="fuseConfig.layout.style === 'vertical-layout-1'">
+  <vertical-layout-1></vertical-layout-1>
+</ng-container>
+
+<ng-http-loader
+  spinner="sk-wave"
+  [backdrop]="true"
+  [opacity]="0.6"
+  [backgroundColor]="'#3d9ae9'"
+  [debounceDelay]="100"
+  [minDuration]="300"
+></ng-http-loader>

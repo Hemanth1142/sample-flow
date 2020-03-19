@@ -1,0 +1,257 @@
+<div id="reported-users" class="page-layout carded fullwidth">
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg accent"></div>
+  <!-- / TOP BACKGROUND -->
+
+  <div class="center">
+    <!-- HEADER -->
+    <div
+      class="header accent"
+      fxLayout="column"
+      fxLayoutAlign="center center"
+      fxLayout.gt-sm="row"
+      fxLayoutAlign.gt-sm="space-between center"
+    >
+      <!-- APP TITLE -->
+      <div
+        class="logo mb-24 mb-md-0"
+        fxLayout="row"
+        fxLayoutAlign="start center"
+      >
+        <mat-icon
+          class="logo-icon s-32 mr-16"
+          [@animate]="{
+            value: '*',
+            params: { delay: '50ms', scale: '0.2' }
+          }"
+        >
+          report
+        </mat-icon>
+        <span
+          class="logo-text h1"
+          [@animate]="{
+            value: '*',
+            params: { delay: '100ms', x: '-25px' }
+          }"
+        >
+          Reported Users
+        </span>
+      </div>
+      <!-- / APP TITLE -->
+
+      <!-- SEARCH -->
+      <div class="search-wrapper mx-32 mx-md-0">
+        <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
+          <mat-icon class="search-icon">search</mat-icon>
+          <input
+            [formControl]="searchtxtControl"
+            placeholder="Search for a Reported User"
+          />
+        </div>
+      </div>
+      <!-- / SEARCH -->
+
+      <div class="changeButtons">
+        <!-- Refresh BUTTON -->
+        <button
+          mat-raised-button
+          matTooltip="Refresh"
+          (click)="refreshList()"
+          class="action-button"
+        >
+          <mat-icon class="icon-button">refresh</mat-icon>
+        </button>
+        <!-- / Refresh BUTTON -->
+
+        <!-- Delete BUTTON -->
+        <button
+          mat-raised-button
+          matTooltip="Delete"
+          (click)="delete()"
+          class="action-button"
+        >
+          <mat-icon class="icon-button">delete</mat-icon>
+        </button>
+        <!-- / Delete BUTTON -->
+      </div>
+    </div>
+    <!-- / HEADER -->
+    <div *ngIf="reportedUsers.length > 0">
+      <ngx-datatable
+        class="material mat-card"
+        [headerHeight]="40"
+        [columnMode]="'flex'"
+        [footerHeight]="50"
+        [rowHeight]="'auto'"
+        [rows]="reportedUsers"
+        [selected]="selected"
+        [reorderable]="false"
+        [selectionType]="'checkbox'"
+        (select)="onSelect($event)"
+        [externalPaging]="true"
+        [count]="pageInfo.count"
+        [offset]="pageInfo.page"
+        [limit]="pageInfo.pageSize"
+        (page)="setPage($event)"
+        (sort)="onSort($event)"
+      >
+        <ngx-datatable-column
+          [width]="48"
+          [canAutoResize]="false"
+          [resizeable]="false"
+          [sortable]="false"
+        >
+          <ng-template
+            ngx-datatable-header-template
+            let-value="value"
+            let-allRowsSelected="allRowsSelected"
+            let-selectFn="selectFn"
+          >
+            <mat-checkbox
+              [checked]="allRowsSelected"
+              (change)="selectFn(!allRowsSelected)"
+            ></mat-checkbox>
+          </ng-template>
+
+          <ng-template
+            ngx-datatable-cell-template
+            let-value="value"
+            let-isSelected="isSelected"
+            let-onCheckboxChangeFn="onCheckboxChangeFn"
+          >
+            <mat-checkbox
+              [checked]="isSelected"
+              (change)="onCheckboxChangeFn($event)"
+            ></mat-checkbox>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column
+          name="Reported By"
+          prop="reportedByUser"
+          [resizeable]="false"
+          [width]="20"
+          [sortable]="false"
+          [flexGrow]="1.5"
+          cellClass="text-truncate"
+        >
+          <ng-template
+            ngx-datatable-cell-template
+            let-row="row"
+            let-value="value"
+          >
+            <span *ngIf="canUpdate">
+              <a
+                class="cur-pointer"
+                (click)="showUserDetails(row.reportedByUserId)"
+                >{{ value }}</a
+              >
+            </span>
+            <span *ngIf="!canUpdate">{{ value }}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column
+          name="Reported For"
+          prop="reportedForUser"
+          [resizeable]="false"
+          [width]="25"
+          [flexGrow]="2"
+          cellClass="text-truncate"
+        >
+          <ng-template
+            ngx-datatable-cell-template
+            let-value="value"
+            let-row="row"
+          >
+            <span>
+              <a
+                class="cur-pointer"
+                (click)="showUserDetails(row.reportedForUserId)"
+                >{{ value }}</a
+              ></span
+            >
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column
+          name="Message"
+          prop="message"
+          [resizeable]="false"
+          [width]="30"
+          [flexGrow]="4"
+          cellClass="text-truncate"
+        >
+          <ng-template
+            ngx-datatable-cell-template
+            let-row="row"
+            let-value="value"
+          >
+            <span>
+              <a
+                class="cur-pointer"
+                (click)="showComplaintDetails(row.complaintId)"
+              >
+                {{ value.substr(0, 35) }}</a
+              >
+            </span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column
+          name="Reported On"
+          prop="createdDate"
+          [resizeable]="false"
+          [width]="15"
+          [flexGrow]="2"
+          cellClass="text-truncate"
+        >
+          <ng-template
+            ngx-datatable-cell-template
+            let-row="row"
+            let-value="value"
+          >
+            <span> {{ value | date: 'd MMM, y,  hh:mm a' }} </span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-footer>
+          <ng-template
+            ngx-datatable-footer-template
+            let-rowCount="pageInfo.count"
+            let-pageSize="pageInfo.pageSize"
+            let-selectedCount="selectedItem.length"
+            let-curPage="pageInfo.page"
+            let-curPage="pageInfo.page"
+            let-offset="offset"
+          >
+            <div class="page-count">
+              <span>
+                {{ selectedItem.length.toLocaleString() }} selected /
+              </span>
+              {{ reportedUsers.length.toLocaleString() }} total
+            </div>
+            <datatable-pager
+              [pagerLeftArrowIcon]="'datatable-icon-left'"
+              [pagerRightArrowIcon]="'datatable-icon-right'"
+              [pagerPreviousIcon]="'datatable-icon-prev'"
+              [pagerNextIcon]="'datatable-icon-skip'"
+              [page]="pageInfo.page"
+              [size]="pageInfo.pageSize"
+              [count]="pageInfo.count"
+              [hidden]="!(pageInfo.count / pageInfo.pageSize > 1)"
+              (change)="onPaginate($event)"
+            >
+            </datatable-pager>
+          </ng-template>
+        </ngx-datatable-footer>
+      </ngx-datatable>
+    </div>
+    <div *ngIf="!reportedUsers.length" class="material mat-card no-data-card">
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <div
+          [@animate]="{ value: '*', params: { duration: '300ms', y: '100px' } }"
+        >
+          <h3>No Reported Videos data found.</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

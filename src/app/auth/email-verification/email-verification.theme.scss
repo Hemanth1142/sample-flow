@@ -1,0 +1,18 @@
+@mixin email-verification-theme($theme) {
+  $background: map-get($theme, background);
+  $is-dark: map-get($theme, is-dark);
+
+  app-email-verification {
+    #email-verification {
+      #email-verification-wrapper {
+        #email-verification-info {
+          @if ($is-dark) {
+            background: mat-color($fuse-navy, 600);
+          } @else {
+            background: map-get($background, card);
+          }
+        }
+      }
+    }
+  }
+}

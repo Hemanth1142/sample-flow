@@ -1,0 +1,20 @@
+<div id="email-verification" fxLayout="column">
+  <div
+    id="email-verification-wrapper"
+    fxLayout="column"
+    fxLayoutAlign="center center"
+  >
+    <div
+      id="email-verification-info"
+      [@animate]="{ value: '*', params: { duration: '300ms', y: '100px' } }"
+    >
+      <div class="logo">
+        <img src="assets/images/logos/black-bg-logo.svg" />
+      </div>
+
+      <div class="title">Email Verification</div>
+      <div *ngIf="valid">Your account is verified. You can login now.</div>
+      <div *ngIf="!valid">Activation link is invalid or expired.</div>
+    </div>
+  </div>
+</div>
